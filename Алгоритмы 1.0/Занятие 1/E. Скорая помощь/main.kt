@@ -1,3 +1,5 @@
+// не работает
+
 fun calculate(input: List): String {
     if (input.size < 5) return "-1 -1"
 
