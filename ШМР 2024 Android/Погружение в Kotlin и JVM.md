@@ -49,6 +49,8 @@
 
     3.1 [Kotlin K2 Compiler](#31-kotlin-k2-compiler)
 
+    3.2 [Kotlin K2 Compiler Plugins](#32-kotlin-k2-compiler-plugins)
+
 4.  [`Kotlin Features`](#4-kotlin-features) (Зная всю информацию выше, посмотрим на фичи языка котлин. Так будет понятнее, зачем они нужны и где действительно помогают)
 
 ## `1` Сборка Android приложения
@@ -396,7 +398,7 @@ Native Code Generator –> .so
 
 К компилятору можно подключать плагины на любом этапе работы компилятора. Давайте разбираться на примерах, что такое плагины. Мы с ними имеем дело постоянно:
 
-#### Kotlin Compose Plugin
+#### <u>***Kotlin Compose Plugin***</u>
 
 Compose работает в паре с компилятором. Аннотации типа @Composable очень часто намекают на то, что где-то используется рефлексия или плагин компилятора котлина
 
@@ -432,7 +434,7 @@ fun Counter($composer: Composer) {
 
 Первый код гораздо понятнее читается и видна суть написанного
 
-#### kolinx.serialization Plugin
+#### ***<u>kotlinx.serialization Plugin***</u>
 
 Этот плагин тоже при помощи аннотаций и специального класса `Json` позволяет генерировать из вашего дата класса json-представление (чтобы, например, отправлять его в Сеть)
 
@@ -465,10 +467,47 @@ fun main() {
 
 Раньше для этого использовали различные библиотеки, сейчас делают просто с помощью плагина. Логично, ведь есть схема дата класса, мы знаем какие поля там есть – наверное можно сгенерировать код, который превращает его в строку с какой-то специфичной структурой. Собственно, kotlinx.serialization это делаает. И при помощи класса Json мы можем либо закодировать data class в json-представление, либо из строки декодировать обратно и получить data class
 
-#### ksp (Kotlin symbol processing)
+#### ***<u>ksp (Kotlin symbol processing)***</u>
 
-API Kotlin для написания плагинов компилятора
+– API Kotlin для написания плагинов компилятора
 
 В целом, ksp довольно простая вещь, за которой скрывается очень мощный инструмент. На самом деле, работая с ksp вам не надо до конца понимать, как устроены плагины или как их писать, какие этапы у компилятора есть
+
+ksp работает где-то в середине frontend части компиляции
+
+Чтобы сделать свой плагин на котлине, нам надо воспользоваться фреймворком SymbolProcessorProvider – создать SymbolProcessor. У него есть две части:
+* Resolver – API для чтения файлов, он возвращает классы:
+  * KSFile
+  * KSDeclaration
+  * KSAnnotation
+  * KSValueArgument
+
+* SymbolProcessorEnvironment (окружение) – API для генерации файлов, что-то типа контекста в андроиде 
+   ```kotlin
+   codeGenerator.createNewFile(
+         filename = "generated",
+         extension = "kt",
+   )
+   ```
+
+Рассмотрим на примере: допустим, мы хотим создать аннотацию, которой мы будем размечать в коде файлы, и мы хотим все эти файлы собрать в список
+
+Это можно применять к Activity, т.к. их всегда нужно регистрировать в манифесте. А вам может быть лень это делать, вы бы хотели, чтобы кодогенератор сам их туда прописал. Поэтому для начала можно хотя бы собрать все такие файлы в единый список, может быть полезно
+
+В Музыке мы такое делали. У нас есть аннотация Experiment – feature toggle (закрывает кусок кода). Раньше была проблема, что 
+
+```kotlin
+SymbolProcessor {
+   override fun process(resolver: Resolver): List<KSAnnotated> {
+      val symbols = resolver.getSymbolsWithAnnotation("com.yandex.MyAnnotation")
+      val declarations = findAnnotatedFiles(symbols)
+      if (declarations.isNotEmpty()) {
+         createFile(declarations)
+      }
+
+      return symbols.filterNot { it.validate() }.toList()
+   }
+}
+```
 
 ## `4` Kotlin Features
