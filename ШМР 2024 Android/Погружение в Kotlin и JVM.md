@@ -839,19 +839,126 @@ val resultValue = when (result) {
 
 ### `4.5` Null Safety
 
-Это, наверное, то о чём многие рассказывают в первую очередь. Я расскажу чуть-чуть с другой стороны
-
-Нуллабельность типов позволяет работать с ними в generic-ах
 
 ```kotlin
 val nullable: Any? = null
 val nonNull: Any = "string"
+```
 
+Это, наверное, то, о чём многие рассказывают в первую очередь. Я расскажу чуть-чуть с другой стороны
+
+Нуллабельность типов позволяет работать с ними в generic-ах
+
+String – наследник String?, в него нельзя записать String?, компилятор об этом сообщает
+
+```kotlin
 class Result<T>(val value: T)
-val result = Resilt<String?>(null)
+val result = Result<String?>(null)
+val type: String = result.value // Type mismatch. Required: String, Found: String?
+```
+
+Или можно указать ограничение сверху для типов generic-а с помощью Any. Любой Any не является наследником nullable типа, Any – наследник Any?
+
+```kotlin
+class Result<T : Any>(val value: T)
+val result = Result(null as String?) // Type argument is not within its bounds. Expected: Any, Found: String?
 val type: String = result.value
 ```
 
+Null safety позволяет проверку на null делать не только для ссылок, но ещё и для системы типов. И это попадает на уровень Compile Time, это довольно мощный инструмент в котлине
+
 ### `4.6` Special Types
+
+Специальными их называют, потому что в джаве их не было
+
+#### **Special Type – `Unit`**
+Это тип, который возвращается из всех функций. Поэтому можно написать, например, такой код
+
+```kotlin
+fun test(arg: Any) {
+    println("arg is $arg")
+}
+
+val wtf = test("hello").hashCode()
+```
+
+Вообще, это позволяет делать expression-ы (выражения). То есть if else может вернуть результат, нам не надо присваивать этот результат в переменную, объявленную до if else. То же самое с when и т.д. Это делает код более читаемым
+
+```kotlin
+val type = if (true) "string" else test("string")
+```
+
+#### **Special Type – `Any`**
+
+Главный класс котлина, от которого наследуются все остальные классы, если не считать его брата близнеца Any?, от которого наследуются все нуллабельные типы и он сам
+
+В джаве были доступы ко всяким функциям типа wait(), notify(), для работы с многопоточностью, для синхронизации на мониторах. В котлине такого нет
+
+```kotlin
+val any = Any()
+any.wait() // Unresolved reference: wait
+```
+
+Это связано с тем, что котлин можно скомпилировать на другие языки, в которых таких функций нет, это особенность jvm. Но если мы знаем, что работаем на коде, который будет компилироваться под jvm, то можем привести Any к типу Object (на самом деле Any это тот же самый java.lang.Object в байткоде, но в его публичном интерфейсе нет методов wait, notify. Следующим хаком можно до них добраться)
+
+```kotlin
+val obj = Any() as java.lang.Object
+obj.wait()
+obj.notify()
+```
+
+#### **Special Type – `Nothing`**
+
+Позволяет строить очень эффективные вещи вместе с generic-ами
+
+```kotlin
+class NothingExample {
+    fun returnNothing(): Nothing = throw Exception()
+    fun acceptNothing(value: Nothing) = Unit
+}
+
+val example = NothingExample()
+fun example() {
+    example.returnNothing()
+    println("hello world") // Unreachable code
+}
+
+example.acceptNothing(Any()) // Type mismatch. Required: Nothing, Found: Any
+```
+
+Nothing является наследником всех классов. Даже если вы напишете свой класс, Nothing будет его наследником. Поэтому это самый узкий класс и получается замкнутая система от всего (Any?) до ничего (Nothing)
+
 ### `4.7` Mutable / Immutable Collections
+
+Разделение коллекций на изменяемые и неизменяемые. Порядок наследования типов:
+```kotlin
+Mutable Iterable -> Iterable
+Mutable Collection -> Collection
+Mutable List -> List
+Mutable Set -> Set
+```
+
 ### `4.8` Generics
+
+Про них гораздо глубже, всё остальное было подводкой к этому. Эту тему редко понимают глубоко и её часто спрашивают на собеседованиях в компании. Я считаю, что дженерики – одна из ключевых вещей в разработке, потому что они позволяют строить действительно удобные системы, проектировать свои фреймворки, на которых будут работать ваши программы где-то внутри
+
+Правильное использование дженериков позволило котлину сделать удобную систему коллекций. На этом построен stream api, когда у коллекции вызываем filter(), он принмает фильтр типа T
+
+Заведём иерархию типов для дальнейшей лекции:
+
+```kotlin
+interface Animal
+interface Mammal : Animal
+interface Predator : Mammal
+
+class Elephant : Mammal
+class Cat : Predator
+```
+
+Наша задача – открыть ресторан для хищников, будем кормить их мясом
+
+```kotlin
+fun restaurant(predators: ArrayList<Predator>) {
+    predators.forEach { println("feed $it") }
+}
+```
