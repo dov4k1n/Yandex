@@ -57,6 +57,22 @@
 
 4.  [`Kotlin Features`](#4-kotlin-features) (Зная всю информацию выше, посмотрим на фичи языка котлин. Так будет понятнее, зачем они нужны и где действительно помогают)
 
+    4.1 [Extension Functions](#41-extension-functions)
+
+    4.2 [Scope Functions](#42-scope-functions)
+
+    4.3 [Functional Types](#43-functional-types)
+
+    4.4 [Sealed Classes](#44-sealed-classes)
+
+    4.5 [Null safety](#45-null-safety)
+
+    4.6 [Special Types](#46-special-types)
+
+    4.7 [Mutable-immutable Collections](#47-mutable--immutable-collections)
+    
+    4.8 [Generics](#48-generics)
+
 ## `1` Сборка Android приложения
 ![alt text](res/Погружение%20в%20Kotlin%20и%20JVM/image.png)
 1. Есть исходники формата `.kt` и `.java`
@@ -841,7 +857,7 @@ val resultValue = when (result) {
 
 Ну и решается холивар программистов "исключения это хорошо или плохо?"
 
-### `4.5` Null Safety
+### `4.5` Null safety
 
 
 ```kotlin
