@@ -1,6 +1,4 @@
 /*
-  Пока не дорешал
-
   https://contest.yandex.ru/contest/27663/problems/B/
 
   Даны два списка чисел, которые могут содержать до 10000 чисел каждый.
@@ -33,40 +31,33 @@
 
 import java.io.File
 
- fun main() {
-    val lines = File("input.txt").forEachLine {
-        line
-            ?.split(" ")
-            ?.map { it.toInt() }
-            ?.distinct() ?: emptyList()
-    }
+fun main() {
+  val lines = File("input.txt").readLines()
 
-    val input = File("input.txt")
+  val intersection = lines
+    .map { line -> line.split(" ").mapNotNull { it.toIntOrNull() }.toSet() }
+    .reduce { acc, set -> acc.intersect(set) }
 
-    var first: List<Int>
-    var second: List<Int>
+  File("output.txt").writeText(intersection.sorted().joinToString(" "))
 
-    val first = File("input.txt").readLine()?.split(" ")?.map { it.toInt() }?.distinct()
+  // var intersection: Set<Int>? = null
 
-    val lines: List<List<Int>> = File("input.txt").forEachLine { line ->
-        if (!first.contains())
-        line
-            ?.split(" ")
-            ?.map { it.toInt() }
-            ?.distinct() ?: emptyList()
-    }
+  // File("input.txt").forEachLine { line ->
+  //   val numbers = line.split(" ")
+  //     .asSequence()
+  //     .mapNotNull { it.toIntOrNull() }
+  //     .toSet()
 
-    File("output.txt").bufferedWriter().use { writer ->
-        input.useLines { lines ->
-            lines.forEach { word ->
-                val result = toPlural(word)
-                writer.write("$result")
-                writer.newLine()
-            }
-        }
-    }
+  //   intersection = if (intersection == null) {
+  //     numbers
+  //   } else {
+  //     intersection!!.intersect(numbers)
+  //   }
+  // }
 
-    val first = readLine()?.split(" ")?.map { it.toInt() }?.distinct() ?: emptyList()
-    val second = readLine()?.split(" ")?.map { it.toInt() }?.distinct() ?: emptyList()
-    println(first.intersect(second).sorted())
- }
+  // File("output.txt").bufferedWriter().use { writer ->
+  //   intersection?.sorted()?.forEach { number ->
+  //     writer.write("$number ")
+  //   }
+  // }
+}
