@@ -1,8 +1,78 @@
+// https://leetcode.com/problems/top-k-frequent-elements/
+fun topKFrequent(nums: IntArray, k: Int): IntArray {
+    // O(NlogN) solution :
+    //
+    // hashmap with key = number, value = frequency
+    //
+    // go through nums for O(N)
+    // for each element check if (frequency[number] != null)
+    // true -> frequency[number]++
+    // false -> frequency[number] = 1
+    //
+    // sort hashmap by frequency for O(NlogN)
+    // return first K
+
+    // 
+
+
+    return intArrayOf(1, 2, 3)
+}
+
+fun main() {
+    println("nums = [1,1,1,2,2,3], k = 2")
+    topKFrequent(intArrayOf(1,1,1,2,2,3), 2).forEach { print("$it ") }
+    println()
+    println("expected: [1, 2]")
+    println()
+
+    println("nums = [1], k = 1")
+    topKFrequent(intArrayOf(1), 1).forEach { print("$it ") }
+    println()
+    println("expected: [1]")
+    println()
+
+    println("nums = [1,1,2,3], k = 2")
+    topKFrequent(intArrayOf(1,1,2,3), 2).forEach { print("$it ") }
+    println()
+    println("expected: [1, 2]")
+    println()
+
+    println("nums = [1,1,2,3], k = 1")
+    topKFrequent(intArrayOf(1,1,2,3), 1).forEach { print("$it ") }
+    println()
+    println("expected: [1]")
+    println()
+
+    println("nums = [1,1,2,3], k = 3")
+    topKFrequent(intArrayOf(1,1,2,3), 3).forEach { print("$it ") }
+    println()
+    println("expected: [1, 2, 3]")
+    println()
+
+    println("nums = [1,1,2,2,3], k = 2")
+    topKFrequent(intArrayOf(1,1,2,2,3), 2).forEach { print("$it ") }
+    println()
+    println("expected: [1, 2]")
+    println()
+
+    println("nums = [1,1,2,2,3,3], k = 2")
+    topKFrequent(intArrayOf(1,1,2,2,3,3), 2).forEach { print("$it ") }
+    println()
+    println("expected: [1, 2]")
+    println()
+
+    println("nums = [2,2,1,1,3,3], k = 2")
+    topKFrequent(intArrayOf(2,2,1,1,3,3), 2).forEach { print("$it ") }
+    println()
+    println("expected: [1, 2] or [2, 1] (?)")
+    println()
+}
+
 // https://leetcode.com/problems/group-anagrams/
 fun groupAnagrams(strs: Array<String>): List<List<String>> {
     // N^2 solution : for each strs[i] search its anagrams?
 
-    // N solution :
+    // NMlogM solution :
     // create a hash map, key = sorted_word, value = list of anagrams
     // go through array
     // check if map[word.sorted()] exists
@@ -23,55 +93,54 @@ fun groupAnagrams(strs: Array<String>): List<List<String>> {
         result.add(value)
     }
     return result
-//    return listOf(listOf())
 }
 
-fun main() {
-    groupAnagrams(arrayOf("eat","tea","tan","ate","nat","bat")).forEach {
-        it.forEach {
-            print("$it, ")
-        }
-        println()
-    }
-    println("1. expected:")
-    listOf(listOf("bat"), listOf("nat","tan"), listOf("ate","eat","tea")).forEach {
-        it.forEach {
-            print("$it, ")
-        }
-        println()
-    }
-    println()
-
-    groupAnagrams(arrayOf("")).forEach {
-        it.forEach {
-            print("$it, ")
-        }
-        println()
-    }
-    println("2. expected:")
-    listOf("").forEach {
-        it.forEach {
-            print("$it, ")
-        }
-        println()
-    }
-    println()
-
-    groupAnagrams(arrayOf("a")).forEach {
-        it.forEach {
-            print("$it, ")
-        }
-        println()
-    }
-    println("3. expected:")
-    listOf(listOf("a")).forEach {
-        it.forEach {
-            print("$it, ")
-        }
-        println()
-    }
-    println()
-}
+//fun main() {
+//    groupAnagrams(arrayOf("eat","tea","tan","ate","nat","bat")).forEach {
+//        it.forEach {
+//            print("$it, ")
+//        }
+//        println()
+//    }
+//    println("1. expected:")
+//    listOf(listOf("bat"), listOf("nat","tan"), listOf("ate","eat","tea")).forEach {
+//        it.forEach {
+//            print("$it, ")
+//        }
+//        println()
+//    }
+//    println()
+//
+//    groupAnagrams(arrayOf("")).forEach {
+//        it.forEach {
+//            print("$it, ")
+//        }
+//        println()
+//    }
+//    println("2. expected:")
+//    listOf("").forEach {
+//        it.forEach {
+//            print("$it, ")
+//        }
+//        println()
+//    }
+//    println()
+//
+//    groupAnagrams(arrayOf("a")).forEach {
+//        it.forEach {
+//            print("$it, ")
+//        }
+//        println()
+//    }
+//    println("3. expected:")
+//    listOf(listOf("a")).forEach {
+//        it.forEach {
+//            print("$it, ")
+//        }
+//        println()
+//    }
+//    println()
+//}
 
 // https://leetcode.com/problems/two-sum/
 fun twoSum(nums: IntArray, target: Int): IntArray {
