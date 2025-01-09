@@ -1,72 +1,222 @@
+// https://leetcode.com/problems/valid-palindrome/
+fun isPalindrome(s: String): Boolean {
+    // O(N) time, O(N) space solution:
+    //
+    // for i in 0..s.len/2 - 1
+    //   if (s[i] != s[len-1 - i])
+    //     return false
+    // return true
+
+//    val _s = s.filter { it.isLetterOrDigit() }.lowercase()
+//    for (i in 0..<_s.length/2) {
+//        if (_s[i] != _s[_s.length-1 - i])
+//            return false
+//    }
+//    return true
+
+    // if can't use std lib function to filter,
+    // create new string filtering manually ascii codes
+    //
+//    var _s = ""
+//    s.forEach {
+//        if (it.code in 65..90) _s += (it.code + 32).toChar() // uppercase letter, changing to lowercase
+//        else if (it.code in 97..122) _s += it                // lowercase letter
+//        else if (it.code in 48..57) _s += it                 // digit
+//    }
+//    println(_s)
+//    for (i in 0..<_s.length/2) {
+//        if (_s[i] != _s[_s.length-1 - i])
+//            return false
+//    }
+//    return true
+
+
+    // O(N) time, O(1) space solution:
+    // check ascii codes with two pointers
+    fun Char.isLetterOrDigit(): Boolean {
+        if (this.code in 65..90) return true
+        if (this.code in 97..122) return true
+        if (this.code in 48..57) return true
+        return false
+    }
+
+    fun Char.lowercase(): Char {
+        return if (this.code in 65..90)
+            (this.code + 32).toChar()
+        else this
+    }
+
+    if (s.isEmpty()) return true
+
+    var l = 0
+    var r = s.length-1
+    while (l < r) {
+        if (!s[l].isLetterOrDigit()) {
+            l++
+            continue
+        }
+        if (!s[r].isLetterOrDigit()) {
+            r--
+            continue
+        }
+        if (s[l].lowercase() != s[r].lowercase())
+            return false
+        l++
+        r--
+    }
+    return true
+}
+
+fun main() {
+    println()
+    var s = "A man, a plan, a canal: Panama"
+    println("s = $s")
+    println(isPalindrome(s))
+    println("true is expected")
+
+
+    println()
+    s = "race a car"
+    println("s = $s")
+    println(isPalindrome(s))
+    println("false is expected")
+
+    println()
+    s = " "
+    println("s = $s")
+    println(isPalindrome(s))
+    println("true is expected")
+
+    println()
+    s = ""
+    println("s = $s")
+    println(isPalindrome(s))
+    println("true is expected")
+
+    println()
+    s = "0123456789A man, a plan, a canal: Panama9876543210"
+    println("s = $s")
+    println(isPalindrome(s))
+    println("true is expected")
+}
+
 // https://leetcode.com/problems/top-k-frequent-elements/
 fun topKFrequent(nums: IntArray, k: Int): IntArray {
-    // O(NlogN) solution :
+    // O(NlogN) time, O(N) space solution :
     //
     // hashmap with key = number, value = frequency
     //
     // go through nums for O(N)
-    // for each element check if (frequency[number] != null)
-    // true -> frequency[number]++
-    // false -> frequency[number] = 1
+    // for each element check if (frequency[number] == null)
+    // true -> frequency[number] = 1
+    // false -> frequency[number]++
     //
-    // sort hashmap by frequency for O(NlogN)
+    // sort hashmap descending by frequency for O(NlogN)
     // return first K
 
-    // 
+//    val count = HashMap<Int, Int>() // O(N) space in worst case
+//    for (num in nums) {
+//        if (count[num] == null) {
+//            count[num] = 1
+//        } else {
+//            count[num] = count[num]!! + 1
+//        }
+//    }
+//    val sorted = mutableListOf<Pair<Int, Int>>() // O(N) space in worst case
+//    for ((num, freq) in count) {
+//        sorted.add(Pair(num, freq))
+//    }
+//    sorted.sortByDescending { it.second }
+//    val result = IntArray(k)
+//    for (i in 0..<k) {
+//        result[i] = sorted[i].first
+//    }
+//    return result
 
+    // O(N) time, O(N) space solution:
+    //
+    // instead of sorting in previous solution
+    // create an array freqArray of size nums.size + 1
+    // consisting of lists
+    // and for each (num, freq) in hashmap
+    // do freqArray[freq].add(num)
+    // then for i in freqArray.size..1
+    // for num in freqArray[i]
+    // result.add(num)
+    // if result.size == k, return result
+    // worst case is when k ~ nums.size => O(N)
 
-    return intArrayOf(1, 2, 3)
+    val count = HashMap<Int, Int>() // O(N) space in worst case
+    for (num in nums) {
+        if (count[num] == null) {
+            count[num] = 1
+        } else {
+            count[num] = count[num]!! + 1
+        }
+    }
+    val freqLists = List(nums.size + 1) { mutableListOf<Int>() } // O(N) space
+    for ((num, freq) in count) {
+        freqLists[freq].add(num)
+    }
+    val result = mutableListOf<Int>()
+    for (i in freqLists.size - 1 downTo 0) {
+        for (num in freqLists[i]) {
+            result.add(num)
+            if (result.size == k) return result.toIntArray()
+        }
+    }
+    return result.toIntArray()
 }
 
-fun main() {
-    println("nums = [1,1,1,2,2,3], k = 2")
-    topKFrequent(intArrayOf(1,1,1,2,2,3), 2).forEach { print("$it ") }
-    println()
-    println("expected: [1, 2]")
-    println()
-
-    println("nums = [1], k = 1")
-    topKFrequent(intArrayOf(1), 1).forEach { print("$it ") }
-    println()
-    println("expected: [1]")
-    println()
-
-    println("nums = [1,1,2,3], k = 2")
-    topKFrequent(intArrayOf(1,1,2,3), 2).forEach { print("$it ") }
-    println()
-    println("expected: [1, 2]")
-    println()
-
-    println("nums = [1,1,2,3], k = 1")
-    topKFrequent(intArrayOf(1,1,2,3), 1).forEach { print("$it ") }
-    println()
-    println("expected: [1]")
-    println()
-
-    println("nums = [1,1,2,3], k = 3")
-    topKFrequent(intArrayOf(1,1,2,3), 3).forEach { print("$it ") }
-    println()
-    println("expected: [1, 2, 3]")
-    println()
-
-    println("nums = [1,1,2,2,3], k = 2")
-    topKFrequent(intArrayOf(1,1,2,2,3), 2).forEach { print("$it ") }
-    println()
-    println("expected: [1, 2]")
-    println()
-
-    println("nums = [1,1,2,2,3,3], k = 2")
-    topKFrequent(intArrayOf(1,1,2,2,3,3), 2).forEach { print("$it ") }
-    println()
-    println("expected: [1, 2]")
-    println()
-
-    println("nums = [2,2,1,1,3,3], k = 2")
-    topKFrequent(intArrayOf(2,2,1,1,3,3), 2).forEach { print("$it ") }
-    println()
-    println("expected: [1, 2] or [2, 1] (?)")
-    println()
-}
+//fun main() {
+//    println("nums = [1,1,1,2,2,3], k = 2")
+//    topKFrequent(intArrayOf(1,1,1,2,2,3), 2).forEach { print("$it ") }
+//    println()
+//    println("expected: [1, 2]")
+//    println()
+//
+//    println("nums = [1], k = 1")
+//    topKFrequent(intArrayOf(1), 1).forEach { print("$it ") }
+//    println()
+//    println("expected: [1]")
+//    println()
+//
+//    println("nums = [1,1,2,3], k = 2")
+//    topKFrequent(intArrayOf(1,1,2,3), 2).forEach { print("$it ") }
+//    println()
+//    println("expected: [1, 2]")
+//    println()
+//
+//    println("nums = [1,1,2,3], k = 1")
+//    topKFrequent(intArrayOf(1,1,2,3), 1).forEach { print("$it ") }
+//    println()
+//    println("expected: [1]")
+//    println()
+//
+//    println("nums = [1,1,2,3], k = 3")
+//    topKFrequent(intArrayOf(1,1,2,3), 3).forEach { print("$it ") }
+//    println()
+//    println("expected: [1, 2, 3]")
+//    println()
+//
+//    println("nums = [1,1,2,2,3], k = 2")
+//    topKFrequent(intArrayOf(1,1,2,2,3), 2).forEach { print("$it ") }
+//    println()
+//    println("expected: [1, 2]")
+//    println()
+//
+//    println("nums = [1,1,2,2,3,3], k = 2")
+//    topKFrequent(intArrayOf(1,1,2,2,3,3), 2).forEach { print("$it ") }
+//    println()
+//    println("expected: [1, 2]")
+//    println()
+//
+//    println("nums = [2,2,1,1,3,3], k = 2")
+//    topKFrequent(intArrayOf(2,2,1,1,3,3), 2).forEach { print("$it ") }
+//    println()
+//    println("expected: [1, 2] or [2, 1] (?)")
+//    println()
+//}
 
 // https://leetcode.com/problems/group-anagrams/
 fun groupAnagrams(strs: Array<String>): List<List<String>> {
