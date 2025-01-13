@@ -1,3 +1,135 @@
+// https://leetcode.com/problems/valid-parentheses/description/
+fun isValid(s: String): Boolean {
+    val closeToOpen = hashMapOf(
+        ')' to '(',
+        ']' to '[',
+        '}' to '{'
+    )
+    val stack = ArrayDeque<Char>()
+    s.forEach {
+        if (it == '(' ||
+            it == '[' ||
+            it == '{') {
+            stack.addLast(it)
+        } else if (closeToOpen[it] != stack.removeLastOrNull()) {
+            return false
+        }
+    }
+    if (stack.size != 0) return false
+    return true
+}
+
+
+
+
+
+// https://leetcode.com/problems/3sum/description/
+fun threeSum(nums: IntArray): List<List<Int>> {
+    // O(N^3) time, O(N) space solution:
+    //
+    // brute force
+    // ans = hashset of lists
+    // sort input to exclude adding duplicates
+    // for i in 0..nums.size-3
+    //   for j in i..nums.size-2
+    //     for k in j..nums.size-1
+    //       if nums[i] + nums[j] + num[k] == target
+    //         add to ans
+
+//        val sorted = nums.sorted()
+//        val ans = HashSet<List<Int>>()
+//        for (i in 0..sorted.size-3) {
+//            for (j in i+1..sorted.size-2) {
+//                for (k in j+1..sorted.size-1) {
+//                    if (sorted[i] + sorted[j] + sorted[k] == 0) {
+//                        ans.add(listOf(sorted[i], sorted[j], sorted[k]))
+//                    }
+//                }
+//            }
+//        }
+//        return ans.toList()
+
+
+
+    // O(N^2) time, O(N) space solution:
+    //
+    // iterate through array,
+    //   for each search two indices
+    //   that sum up to target - it
+    //   it would take also O(N) (two sum problem)
+
+    val sorted = nums.sorted()
+    val ans = mutableListOf<List<Int>>()
+    for (i in 0..sorted.size-3) {
+        if (sorted[i] > 0) break // all negatives processed (micro opt)
+        if (i > 0 && sorted[i] == sorted[i - 1]) continue // skipping duplicates (micro opt)
+
+        val target = (-1) * sorted[i]
+        var left = i + 1
+        var right = sorted.size - 1
+        while (left < right) {
+            val sum = sorted[left] + sorted[right]
+            if (sum == target) {
+                ans.add(listOf(sorted[i], sorted[left], sorted[right]))
+                left++
+                right--
+                while (left < right &&
+                    sorted[left] == sorted[left - 1]) {
+                    left++
+                }
+            } else if (sum > target) {
+                right--
+                continue
+            } else if (sum < target) {
+                left++
+            }
+        }
+    }
+    return ans
+}
+
+
+
+
+
+// https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/
+fun twoSum2(numbers: IntArray, target: Int): IntArray {
+    // O(N) time, O(1) space solution:
+    //
+    // two pointers - left, right
+    // pointing to the begin and end
+    // if left + right equals target
+    //   return (left, right)
+    // if left + right is less than target
+    //   increase left
+    // if left + right is greater than target
+    //   decrease right
+    // else return empty array
+
+    var left = 0
+    var right = numbers.size - 1
+
+    while (left < right) {
+        val sum = numbers[left] + numbers[right]
+
+        if (sum == target) {
+            return intArrayOf(left + 1, right + 1)
+        } else if (sum < target) {
+            left++
+            continue
+        } else if (sum > target) {
+            right--
+            continue
+        }
+    }
+
+    return intArrayOf()
+}
+
+
+
+
+
 // https://leetcode.com/problems/valid-palindrome/
 fun isPalindrome(s: String): Boolean {
     // O(N) time, O(N) space solution:
@@ -99,6 +231,10 @@ fun main() {
     println(isPalindrome(s))
     println("true is expected")
 }
+
+
+
+
 
 // https://leetcode.com/problems/top-k-frequent-elements/
 fun topKFrequent(nums: IntArray, k: Int): IntArray {
@@ -218,6 +354,10 @@ fun topKFrequent(nums: IntArray, k: Int): IntArray {
 //    println()
 //}
 
+
+
+
+
 // https://leetcode.com/problems/group-anagrams/
 fun groupAnagrams(strs: Array<String>): List<List<String>> {
     // N^2 solution : for each strs[i] search its anagrams?
@@ -292,6 +432,10 @@ fun groupAnagrams(strs: Array<String>): List<List<String>> {
 //    println()
 //}
 
+
+
+
+
 // https://leetcode.com/problems/two-sum/
 fun twoSum(nums: IntArray, target: Int): IntArray {
     // 1. N^2 solution : for a[i] search if a[i] + a[j] == target with j = i+1..a.size
@@ -363,6 +507,10 @@ fun twoSum(nums: IntArray, target: Int): IntArray {
 //    println()
 //}
 
+
+
+
+
 // https://leetcode.com/problems/valid-anagram/
 fun isAnagram(s: String, t: String): Boolean {
     // 1. (S+T)log(S+T) solution : sort both strings, check if they are equal
@@ -400,6 +548,10 @@ fun isAnagram(s: String, t: String): Boolean {
 //    println(isAnagram("ab", "a"))
 //    println(isAnagram("aacc", "ccac"))
 //}
+
+
+
+
 
 // https://leetcode.com/problems/contains-duplicate/
 fun containsDuplicate(nums: IntArray): Boolean {
