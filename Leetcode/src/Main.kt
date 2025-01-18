@@ -1,3 +1,142 @@
+
+
+
+
+
+
+// https://leetcode.com/problems/search-a-2d-matrix/
+fun searchMatrix(matrix: Array<IntArray>, target: Int): Boolean {
+    // binary search for row
+    // then binary search for column
+    var t = 0
+    var b = matrix.size - 1
+    var mRow = (t + b) / 2
+
+    while (t <= b) {
+        when {
+            matrix[mRow][0] == target -> return true
+            matrix[mRow][0] < target -> t = mRow + 1
+            matrix[mRow][0] > target -> b = mRow - 1
+        }
+        mRow = (t + b) / 2
+    }
+
+    var l = 0
+    var r = matrix[mRow].size - 1
+
+    while (l <= r) {
+        val mCol = (l + r) / 2
+        when {
+            matrix[mRow][mCol] == target -> return true
+            matrix[mRow][mCol] < target -> l = mCol + 1
+            matrix[mRow][mCol] > target -> r = mCol - 1
+        }
+    }
+
+    return false
+}
+
+
+
+
+// https://leetcode.com/problems/binary-search/
+fun search(nums: IntArray, target: Int): Int {
+    var left = 0
+    var right = nums.size - 1
+    while (left <= right) {
+        val mid = (left + right) / 2
+        if (nums[mid] == target) {
+            return mid
+        } else if (nums[mid] < target) {
+            left = mid + 1
+            continue
+        } else if (nums[mid] > target) {
+            right = mid - 1
+            continue
+        }
+    }
+    return -1
+}
+
+
+
+
+
+// https://leetcode.com/problems/evaluate-reverse-polish-notation/
+fun evalRPN(tokens: Array<String>): Int {
+    val stack = ArrayDeque<Int>()
+    var a: Int
+    var b: Int
+    for (token in tokens) {
+        if (token == "+") {
+            a = stack.removeLast()
+            b = stack.removeLast()
+            stack.addLast(b + a)
+        } else if (token == "-") {
+            a = stack.removeLast()
+            b = stack.removeLast()
+            stack.addLast(b - a)
+        } else if (token == "*") {
+            a = stack.removeLast()
+            b = stack.removeLast()
+            stack.addLast(b * a)
+        } else if (token == "/") {
+            a = stack.removeLast()
+            b = stack.removeLast()
+            stack.addLast(b / a)
+        } else {
+            stack.addLast(token.toInt())
+        }
+    }
+    return stack.removeLast()
+}
+
+
+
+
+
+// https://leetcode.com/problems/min-stack/
+class MinStack() {
+    class ListNode(var value: Int) {
+        var next: ListNode? = null
+        var min: Int = value
+    }
+
+    private var top: ListNode? = null
+
+    fun push(`val`: Int) {
+        if (top == null) {
+            top = ListNode(`val`)
+        } else {
+            val new = ListNode(`val`)
+            val topCopy = top
+            if (`val` < topCopy!!.min) {
+                new.min = `val`
+            } else {
+                new.min = topCopy.min
+            }
+            new.next = topCopy
+            top = new
+        }
+    }
+
+    fun pop() {
+        top = top?.next
+    }
+
+    fun top(): Int {
+        return top!!.value
+    }
+
+    fun getMin(): Int {
+        return top!!.min
+    }
+}
+
+
+
+
+
 // https://leetcode.com/problems/valid-parentheses/description/
 fun isValid(s: String): Boolean {
     val closeToOpen = hashMapOf(
