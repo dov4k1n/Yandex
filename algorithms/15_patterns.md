@@ -61,7 +61,7 @@ I’ll share when to use each pattern along with a sample problem and provide li
 
 ## 1. Prefix Sum
 
-![alt text](15_PATTERNS_IMG/image.png)
+![alt text](15_patterns_images/image.png)
 
 Prefix Sum involves **preprocessing** an array to create a new array where each element at index `i` represents the sum of the array from the start up to `i`. This allows for efficient sum queries on subarrays.
 
@@ -84,7 +84,7 @@ Given an array `nums`, answer multiple queries about the sum of elements within 
 
 ## 2. Two Pointers
 
-![alt text](15_PATTERNS_IMG/image-1.png)
+![alt text](15_patterns_images/image-1.png)
 
 The Two Pointers pattern involves using two pointers to iterate through an array or list, often used to find **pairs or elements** that meet specific criteria.
 
@@ -110,7 +110,7 @@ Find two numbers in a sorted array that add up to a target value.
 
 ## 3. Sliding Window
 
-![alt text](15_PATTERNS_IMG/image-2.png)
+![alt text](15_patterns_images/image-2.png)
 
 The Sliding Window pattern is used to find a **subarray or substring** that satisfies a specific condition, optimizing the time complexity by maintaining a window of elements.
 
@@ -134,7 +134,7 @@ Find the maximum sum of a subarray of size k.
 
 ## 4. Fast & Slow Pointers
 
-![alt text](15_PATTERNS_IMG/image-3.png)
+![alt text](15_patterns_images/image-3.png)
 
 The Fast & Slow Pointers (Tortoise and Hare) pattern is used to **detect cycles** in linked lists and other similar structures.
 
@@ -153,7 +153,7 @@ Detect if a linked list has a cycle.
 
 ## 5. LinkedList In-place Reversal
 
-![alt text](15_PATTERNS_IMG/image-4.png)
+![alt text](15_patterns_images/image-4.png)
 
 The In-place Reversal of a LinkedList pattern reverses parts of a linked list without using extra space.
 
@@ -176,7 +176,7 @@ Reverse a sublist of a linked list from position `m` to `n`.
 
 ## 6. Monotonic Stack
 
-![alt text](15_PATTERNS_IMG/image-5.png)
+![alt text](15_patterns_images/image-5.png)
 
 The Monotonic Stack pattern uses a stack to maintain a sequence of elements in a specific order (increasing or decreasing).
 
@@ -201,7 +201,7 @@ Find the next greater element for each element in an array. Output `-1` if the g
 
 ## 7. Top K Elements
 
-![alt text](15_PATTERNS_IMG/image-6.png)
+![alt text](15_patterns_images/image-6.png)
 
 The Top 'K' Elements pattern finds the top k largest or smallest elements in an array or stream of data using **heaps** or **sorting**.
 
@@ -224,7 +224,7 @@ Find the k-th largest element in an unsorted array.
 
 ## 8. Overlapping Intervals
 
-![alt text](15_PATTERNS_IMG/image-7.png)
+![alt text](15_patterns_images/image-7.png)
 
 The Overlapping Intervals pattern is used to merge or handle overlapping intervals in an array.
 
@@ -250,7 +250,7 @@ Merge all overlapping intervals.
 
 ## 9. Modified Binary Search
 
-![alt text](15_PATTERNS_IMG/image-8.png)
+![alt text](15_patterns_images/image-8.png)
 
 The Modified Binary Search pattern adapts binary search to solve a wider range of problems, such as finding elements in rotated sorted arrays.
 
@@ -274,7 +274,7 @@ Find an element in a rotated sorted array.
 
 ## 10. Binary Tree Traversal
 
-![alt text](15_PATTERNS_IMG/image-9.png)
+![alt text](15_patterns_images/image-9.png)
 
 Binary Tree Traversal involves visiting all the nodes in a binary tree in a specific order.
 
@@ -299,7 +299,7 @@ Perform inorder traversal of a binary tree.
 
 ## 11. Depth-First Search (DFS)
 
-![alt text](15_PATTERNS_IMG/image-10.png)
+![alt text](15_patterns_images/image-10.png)
 
 Depth-First Search (DFS) is a traversal technique that explores as far down a branch as possible before backtracking.
 
@@ -323,7 +323,7 @@ Find all paths from the root to leaves in a binary tree.
 
 ## 12. Breadth-First Search (BFS)
 
-![alt text](15_PATTERNS_IMG/image-11.png)
+![alt text](15_patterns_images/image-11.png)
 
 Breadth-First Search (BFS) is a traversal technique that explores nodes level by level in a tree or graph.
 
@@ -346,7 +346,7 @@ Perform level-order traversal of a binary tree.
 
 ## 13. Matrix Traversal
 
-![alt text](15_PATTERNS_IMG/image-12.png)
+![alt text](15_patterns_images/image-12.png)
 
 Matrix Traversal involves traversing elements in a matrix using different techniques (DFS, BFS, etc.).
 
@@ -356,7 +356,7 @@ Use this pattern for problems involving traversing 2D grids or matrices horizont
 Perform flood fill on a 2D grid. Change all the cells connected to the starting cell to new color.
 
 **Example**:
-* **Input**: 15_PATTERNS_IMG/image = [[1,1,1],[1,1,0],[1,0,1]], sr = 1, sc = 1, newColor = 2
+* **Input**: 15_patterns_images/image = [[1,1,1],[1,1,0],[1,0,1]], sr = 1, sc = 1, newColor = 2
 * **Output**: [[2,2,2],[2,2,0],[2,0,1]]
 * **Explanation**:
   1. Use DFS or BFS to traverse the matrix starting from the given cell.
@@ -369,7 +369,7 @@ Perform flood fill on a 2D grid. Change all the cells connected to the starting 
 
 ## 14. Backtracking
 
-![alt text](15_PATTERNS_IMG/image-13.png)
+![alt text](15_patterns_images/image-13.png)
 
 Backtracking explores all possible solutions and backtracks when a solution path fails.
 
@@ -393,7 +393,7 @@ Generate all permutations of a given list of numbers.
 
 ## 15. Dynamic Programming Patterns
 
-![alt text](15_PATTERNS_IMG/image-14.png)
+![alt text](15_patterns_images/image-14.png)
 
 Dynamic Programming (DP) involves breaking down problems into smaller subproblems and solving them using a bottom-up or top-down approach.
 
