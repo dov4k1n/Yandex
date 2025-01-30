@@ -23,5 +23,6 @@ Data structure | Kotlin | Java | C++
 1. https://www.youtube.com/live/7pbG923ubQE
 2. https://kotlinlang.org/docs/collections-overview.html
 3. https://github.com/JetBrains/kotlin/tree/master/libraries/stdlib/src/kotlin/collections
-4. https://www.geeksforgeeks.org/collections-in-java-2/
-5. https://dsakt.github.io/docs/overview/
+4. https://en.cppreference.com/w/cpp/container
+5. https://www.geeksforgeeks.org/collections-in-java-2/
+6. https://dsakt.github.io/docs/overview/
