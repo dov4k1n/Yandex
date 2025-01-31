@@ -1,7 +1,10 @@
 > Solving leetcode problems from
 > https://neetcode.io/roadmap
 
-`Total: 28`
+```
+Solved: 28
+Total: 143
+```
 
 # Array & Hashing 
 - [x] Contains Duplicate - LeetCode
