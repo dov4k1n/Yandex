@@ -4,6 +4,408 @@
 
 
 
+// https://leetcode.com/problems/subtree-of-another-tree/
+fun isSubtree(root: TreeNode?, subRoot: TreeNode?): Boolean {
+    val q = ArrayDeque<TreeNode?>()
+    q.addLast(root)
+    while (q.isNotEmpty()) {
+        val node = q.removeFirst()
+        if (node?.`val` == subRoot?.`val` &&
+            isSameTree(node, subRoot)) {
+            return true
+        } else {
+            if (node?.left != null) q.addLast(node.left)
+            if (node?.right != null) q.addLast(node.right)
+        }
+    }
+    return false
+}
+
+
+
+
+
+// https://leetcode.com/problems/same-tree/
+fun isSameTree(p: TreeNode?, q: TreeNode?): Boolean {
+    if (p == null && q == null) return true
+    if (p != null && q != null && p.`val` == q.`val`) {
+        return isSameTree(p.left, q.left) &&
+               isSameTree(p.right, q.right)
+    }
+    return false
+}
+
+
+
+
+
+// https://leetcode.com/problems/balanced-binary-tree/
+private var isBalanced = true
+
+fun isBalanced(root: TreeNode?): Boolean {
+    dfs(root)
+    return isBalanced
+}
+
+fun abs(x: Int): Int = if (x >= 0) x else (-1) * x
+
+private fun dfs2(root: TreeNode?): Int {
+    if (root == null) return 0
+
+    val lh = dfs2(root.left)
+    val rh = dfs2(root.right)
+
+    if (abs(lh - rh) > 1) isBalanced = false
+
+    return 1 + maxOf(lh, rh)
+}
+
+
+
+
+
+// https://leetcode.com/problems/diameter-of-binary-tree/
+private var diameter = 0
+
+fun diameterOfBinaryTree(root: TreeNode?): Int {
+    // for each node calculate its left and right subtree heights
+    // longest path that pass through that node is the sum of those heights
+    // the diameter of the whole tree is the max of those longest paths
+    dfs(root)
+    return diameter
+}
+
+private fun dfs(root: TreeNode?): Int {
+    if (root == null) return 0
+
+    val leftHeight = dfs(root.left)
+    val rightHeight = dfs(root.right)
+    diameter = maxOf(diameter, leftHeight + rightHeight)
+
+    return 1 + maxOf(leftHeight, rightHeight)
+}
+
+
+
+
+
+// https://leetcode.com/problems/maximum-depth-of-binary-tree/
+fun maxDepth(root: TreeNode?): Int {
+    if (root == null) return 0
+    return 1 + maxOf(maxDepth(root.left), maxDepth(root.right))
+}
+
+
+
+
+
+// https://leetcode.com/problems/invert-binary-tree/
+fun invertTree(root: TreeNode?): TreeNode? {
+    if (root == null) return null
+
+    val tmp = root.left
+    root.left = root.right
+    root.right = tmp
+
+    invertTree(root.left)
+    invertTree(root.right)
+
+    return root
+}
+class TreeNode(var `val`: Int) {
+    var left: TreeNode? = null
+    var right: TreeNode? = null
+}
+
+
+
+
+
+// https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+fun removeNthFromEnd(head: ListNode?, n: Int): ListNode? {
+    // 1 2 3 4 5 6 7   8   9 10 11 12 13
+    // 1 2 3 4 5 6 7   8   9 10 11 12 13
+    // calculate size
+    // step from the begin size-n times
+    // remove the node
+    // var sz = 0
+    // var node = head
+    // while (node != null) {
+    //     sz++
+    //     node = node?.next
+    // }
+
+    // if (sz == n) return head?.next
+    // node = head
+    // repeat (sz-n-1) {
+    //     node = node?.next
+    // }
+    // node?.next = node?.next?.next
+    // return head
+
+    // step n times with one iterator
+    // step with second iterator while first reaches the end
+    // remove the node
+    var first = head
+    repeat (n) {
+        first = first?.next
+    }
+
+    val prehead = ListNode(0)
+    prehead.next = head
+    var second: ListNode? = prehead
+
+    while (first != null) {
+        first = first?.next
+        second = second?.next
+    }
+    second?.next = second?.next?.next
+
+    return prehead.next
+}
+
+
+
+
+
+// https://leetcode.com/problems/reorder-list/
+fun reorderList(head: ListNode?): Unit {
+    // initial:
+    // 1 > 2 > 3 > 4 > 5 > ... > n
+
+    // result:
+    // 1 > n > 2 > n-1 > 3 > n-2 > ...
+
+    // step -1 binding:
+    // 1 > 2 > 3 > ... > n/2
+    // n > n-1 > n-2 > ... > n/2 + 1
+
+    // step -2 reversing 2nd half order:
+    // 1 > 2 > 3 > ... > n/2
+    // n/2 + 1 > ... > n-2 > n-1 > n
+
+    // step -3 splitting in half
+
+    // step -4 finding the middle (with fast & slow pointers approach)
+
+    var slow = head
+    var fast = head?.next
+    while (fast != null) { // finding the middle
+        slow = slow?.next
+        fast = fast.next?.next
+        // fast pointer is twice faster than slow pointer
+        // so when slow reaches the middle
+        // fast reaches the end
+        // and vice versa
+    }
+
+    var shalf = slow
+    var curr = shalf
+    var prev: ListNode? = null
+    while (curr != null) { // reversing 2nd half order
+        val next = curr.next
+        curr.next = prev
+        prev = curr
+        curr = next
+    }
+
+    shalf = prev
+    var fhalf = head
+    while (shalf != null || fhalf != null) { // binding
+        val fnext = fhalf?.next
+        val snext = shalf?.next
+        fhalf?.next = shalf
+        shalf?.next = fnext
+        fhalf = fnext
+        shalf = snext
+    }
+}
+
+
+
+
+
+// https://leetcode.com/problems/linked-list-cycle/
+fun hasCycle(head: ListNode?): Boolean {
+    var slow = head
+    var fast = head
+    while (true) {
+        slow = slow?.next
+        fast = fast?.next?.next
+        if (fast == null) return false
+        if (slow == fast) return true
+    }
+    return false
+}
+
+
+
+
+
+// https://leetcode.com/problems/merge-two-sorted-lists/
+fun mergeTwoLists(list1: ListNode?, list2: ListNode?): ListNode? {
+    val head = ListNode(0)
+    var node = head
+    var l1 = list1
+    var l2 = list2
+    while (l1 != null && l2 != null) {
+        if (l1.`val` < l2.`val`) {
+            node.next = l1
+            l1 = l1.next
+        } else {
+            node.next = l2
+            l2 = l2.next
+        }
+        node = node.next!!
+    }
+    node.next = l1 ?: l2
+    return head.next
+}
+
+
+
+
+
+// https://leetcode.com/problems/reverse-linked-list/
+fun reverseList(head: ListNode?): ListNode? {
+    var curr = head
+    var prev: ListNode? = null
+    while (curr != null) {
+        val next = curr.next
+        curr.next = prev
+        prev = curr
+        curr = next
+    }
+    return prev
+}
+class ListNode(var `val`: Int) {
+    var next: ListNode? = null
+}
+
+
+
+
+
+// https://leetcode.com/problems/longest-repeating-character-replacement/
+fun characterReplacement(s: String, k: Int): Int {
+    val count = HashMap<Char, Int>()
+    var maxF = 0
+    var res = 0
+    var l = 0
+    for (r in 0..s.length-1) {
+        count[s[r]] = 1 + count.getOrDefault(s[r], 0)
+        maxF = maxOf(maxF, count[s[r]]!!)
+        while (r-l+1 - maxF > k) {
+            count[s[l]] = count[s[l]]!! - 1
+            l++
+        }
+        res = maxOf(res, r-l+1)
+    }
+    return res
+}
+
+
+
+
+
+// https://leetcode.com/problems/longest-substring-without-repeating-characters/
+fun lengthOfLongestSubstring(s: String): Int {
+    var ans = 0
+    val encountered = HashMap<Char, Boolean>()
+    var l = 0
+    var r = 0
+    fun maxOf(a: Int, b: Int): Int = if (a < b) b else a
+    while (r < s.length) {
+        if (encountered[s[r]] == null) {
+            ans = maxOf(r - l + 1, ans)
+        } else {
+            while (encountered[s[r]] != null) {
+                encountered.remove(s[l])
+                l++
+            }
+        }
+        encountered[s[r]] = true
+        r++
+    }
+    return ans
+}
+
+
+
+
+
+// https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+fun maxProfit(prices: IntArray): Int {
+    // while not encountered
+    // lower price to buy
+    // calculate profits and save maximum
+    // else repeat with new buying price, but lower
+
+    fun maxOf(a: Int, b: Int): Int = if (a < b) b else a
+
+    var l = 0
+    var r = 1
+    var maxP = 0
+    while (r < prices.size) {
+        if (prices[l] < prices[r]) {
+            val profit = prices[r] - prices[l]
+            maxP = maxOf(profit, maxP)
+        } else {
+            l = r
+        }
+        r++
+    }
+    return maxP
+}
+
+
+
+
+
+// https://leetcode.com/problems/koko-eating-bananas/
+fun minEatingSpeed(piles: IntArray, h: Int): Int {
+    // it takes ceil(x/k) hours to eat one pile
+    // need to minimize k
+    // and eat all piles within h hours
+    //
+    // k is in 1..max(piles)
+    // do binary search in that range
+    //
+    // algorithm would take O(nlogm) time and O(1) space
+    // where n == piles.size, m == max(piles)
+
+    var max = piles[0]
+    piles.forEach { if (it > max) max = it }
+
+    fun ceil(x: Double): Long {
+        if (x.toInt() < x)
+            return x.toLong() + 1
+        return x.toLong()
+    }
+
+    var l = 1
+    var r = max
+    var k = max
+    while (l <= r) {
+        val m = (l + r) / 2
+        var time: Long = 0
+        piles.forEach { time += ceil(it.toDouble() / m) }
+        if (time <= h) {
+            if (m < k) k = m
+            r = m - 1 // maybe can eat less
+            continue
+        } else {
+            l = m + 1 // need to eat more
+            continue
+        }
+    }
+    return k
+}
+
+
+
+
+
 // https://leetcode.com/problems/search-a-2d-matrix/
 fun searchMatrix(matrix: Array<IntArray>, target: Int): Boolean {
     // binary search for row
