@@ -69,7 +69,7 @@ Total: 143
 - [x] Balanced Binary Tree - LeetCode
 - [x] Same Tree - LeetCode
 - [x] Subtree of Another Tree - LeetCode
-- [ ] Lowest Common Ancestor of a Binary Search Tree - LeetCode
+- [x] Lowest Common Ancestor of a Binary Search Tree - LeetCode
 - [ ] Binary Tree Level Order Traversal - LeetCode
 - [ ] Binary Tree Right Side View - LeetCode
 - [ ] Count Good Nodes in Binary Tree - LeetCode

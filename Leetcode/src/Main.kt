@@ -4,6 +4,27 @@
 
 
 
+// https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+fun lowestCommonAncestor(root: TreeNode?, p: TreeNode?, q: TreeNode?): TreeNode? {
+    if (root == null || p == null || q == null) return null
+
+    var cur = root
+    while (cur != null) {
+        if (p.`val` < cur.`val` && q.`val` < cur.`val`) {
+            cur = cur.left
+        } else if (p.`val` > cur.`val` && q.`val` > cur.`val`) {
+            cur = cur.right
+        } else {
+            return cur
+        }
+    }
+    return null
+}
+
+
+
+
+
 // https://leetcode.com/problems/subtree-of-another-tree/
 fun isSubtree(root: TreeNode?, subRoot: TreeNode?): Boolean {
     val q = ArrayDeque<TreeNode?>()

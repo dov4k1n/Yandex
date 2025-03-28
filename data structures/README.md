@@ -20,6 +20,13 @@ Data structure | Kotlin | Java | C++
 |[Deque](#deque)|`ArrayDeque`|`ArrayDeque`|`std::deque`
 |Heap||`PriorityQueue`|`std::priority_queue`
 
+```kotlin
+// kotlin
+val minHeap = java.util.PriorityQueue<Int>()
+val maxHeap = java.util.PriorityQueue<Int>() { x, y -> y - x }
+val minHeap2 = java.util.PriorityQueue<Int>() { x, y -> x - y }
+```
+
 > [!NOTE]
 > All classes in `Java`'s column are available in Kotlin via `import java.util.<class name>`
 > 
